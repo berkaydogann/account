@@ -1,23 +1,30 @@
 package com.berkay.account;
 
-import com.berkay.account.model.Account;
+import com.berkay.account.model.Customer;
+import com.berkay.account.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.HashSet;
+
 
 @SpringBootApplication
 public class AccountApplication implements CommandLineRunner {
+    private final CustomerRepository customerRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(AccountApplication.class, args);
-	}
+    public AccountApplication(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(AccountApplication.class, args);
+    }
 
 
-	@Override
-	public void run(String... args) throws Exception {
-
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        Customer customer = customerRepository.save(new Customer("", "Berkay", "Aydogan", new HashSet<>()));
+        System.out.println(customer);
+    }
 }

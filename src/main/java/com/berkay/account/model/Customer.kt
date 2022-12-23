@@ -1,6 +1,6 @@
 package com.berkay.account.model
 
-import jakarta.persistence.*
+import javax.persistence.*
 import org.hibernate.annotations.GenericGenerator
 
 @Entity
@@ -10,30 +10,34 @@ data class Customer(
         @GeneratedValue(generator = "UUID")
         @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
         val id: String?,
+
         val name: String?,
-        var surname: String?,
+        val surname: String?,
 
-        @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-        val accounts: Set<Account>?
-){
-        override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (javaClass != other?.javaClass) return false
+        @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+        val accounts: Set<Account>
+) {
 
-                other as Customer
+    constructor(name: String, surname: String) : this("", name, surname, HashSet())
 
-                if (id != other.id) return false
-                if (name != other.name) return false
-                if (surname != other.surname) return false
-                if (accounts != other.accounts) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-                return true
-        }
+        other as Customer
 
-        override fun hashCode(): Int {
-                var result = id?.hashCode() ?: 0
-                result = 31 * result + (name?.hashCode() ?: 0)
-                result = 31 * result + (surname?.hashCode() ?: 0)
-                return result
-        }
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (surname != other.surname) return false
+        if (accounts != other.accounts) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (surname?.hashCode() ?: 0)
+        return result
+    }
 }
