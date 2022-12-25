@@ -1,10 +1,10 @@
 package com.berkay.account.dto
 
 data class CustomerDto(
-        var id: String,
-        var name: String,
-        var surname: String,
-        var account: Set<CustomerAccountDto>?
+        val id: String?,
+        val name: String?,
+        val surname: String?,
+        val accounts: Set<CustomerAccountDto>?
 ) {
 
 }
