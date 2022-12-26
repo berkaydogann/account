@@ -6,7 +6,6 @@ import com.berkay.account.exception.CustomerNotFoundException;
 import com.berkay.account.model.Customer;
 import com.berkay.account.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.stream.Collectors;
 @Service
 public class CustomerService {
@@ -30,7 +29,7 @@ public class CustomerService {
         return converter.convertToCustomerDto(findCustomerById(customerId));
     }
 
-    public List<CustomerDto> getAllCustomer() {
+    public Iterable<CustomerDto> getAllCustomer() {
 
         return customerRepository.findAll()
                 .stream()

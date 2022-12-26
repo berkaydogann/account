@@ -10,35 +10,51 @@ import org.springframework.stereotype.Service;
 import com.berkay.account.model.Customer;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service
-public class AccountService {
+public class AccountService<AccountDtoConverter> {
 
     private final AccountRepository accountRepository;
     private final CustomerService customerService;
-    private final TransactionService transactionService;
     private final AccoutDtoConverter converter;
+    private final Clock clock;
 
-    public AccountService(AccountRepository accountRepository, CustomerService customerService, TransactionService transactionService, AccoutDtoConverter converter) {
+    public AccountService(AccountRepository accountRepository,
+                          CustomerService customerService,
+                          AccountDtoConverter converter, Clock clock) {
         this.accountRepository = accountRepository;
         this.customerService = customerService;
-        this.transactionService = transactionService;
-        this.converter = converter;
+        this.converter = (AccoutDtoConverter) converter;
+        this.clock = clock;
     }
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest) {
         Customer customer = customerService.findCustomerById(createAccountRequest.getCustomerId());
 
-        Account account = new Account(customer,
+        Account account = new Account(
+                customer,
                 createAccountRequest.getInitialCredit(),
-                LocalDateTime.now()
-        );
+                getLocalDateTimeNow());
+
         if (createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0) {
-            Transaction transaction = transactionService.initiateMoney(account, createAccountRequest.getInitialCredit());
+            Transaction transaction = new Transaction(
+                    createAccountRequest.getInitialCredit(),
+                    getLocalDateTimeNow(),
+                    account);
+
             account.getTransaction().add(transaction);
         }
         return converter.convert(accountRepository.save(account));
+    }
+
+    private LocalDateTime getLocalDateTimeNow() {
+        Instant instant = clock.instant();
+        return LocalDateTime.ofInstant(
+                instant,
+                Clock.systemDefaultZone().getZone());
     }
 
 }

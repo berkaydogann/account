@@ -21,7 +21,7 @@ data class Transaction(
         val account: Account
 
 ) {
-    constructor(amount: BigDecimal, account: Account) : this(
+    constructor(amount: BigDecimal, transactionDate: LocalDateTime, account: Account) : this(
             id = "",
             amount = amount,
             transactionDate = LocalDateTime.now(),
