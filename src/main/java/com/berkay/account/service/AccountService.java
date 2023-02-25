@@ -1,7 +1,6 @@
 package com.berkay.account.service;
 
 import com.berkay.account.dto.AccountDto;
-import com.berkay.account.dto.AccoutDtoConverter;
 import com.berkay.account.dto.CreateAccountRequest;
 import com.berkay.account.model.Account;
 import com.berkay.account.model.Transaction;
@@ -15,20 +14,22 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service
-public class AccountService<AccountDtoConverter> {
+public class AccountService<AccoutDtoConverter> {
 
     private final AccountRepository accountRepository;
     private final CustomerService customerService;
     private final AccoutDtoConverter converter;
     private final Clock clock;
 
+
     public AccountService(AccountRepository accountRepository,
                           CustomerService customerService,
-                          AccountDtoConverter converter, Clock clock) {
+                          AccoutDtoConverter converter,Clock clock) {
         this.accountRepository = accountRepository;
         this.customerService = customerService;
-        this.converter = (AccoutDtoConverter) converter;
+        this.converter = converter;
         this.clock = clock;
+
     }
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest) {
@@ -47,7 +48,7 @@ public class AccountService<AccountDtoConverter> {
 
             account.getTransaction().add(transaction);
         }
-        return converter.convert(accountRepository.save(account));
+        return converter(accountRepository.save(account));
     }
 
     private LocalDateTime getLocalDateTimeNow() {

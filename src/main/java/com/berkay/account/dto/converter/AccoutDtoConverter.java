@@ -1,7 +1,12 @@
-package com.berkay.account.dto;
+package com.berkay.account.dto.converter;
 
+import com.berkay.account.dto.AccountDto;
+import com.berkay.account.dto.CustomerDtoConverter;
+import com.berkay.account.dto.TransactionDtoConverter;
 import com.berkay.account.model.Account;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +17,7 @@ public class AccoutDtoConverter {
     private final TransactionDtoConverter transactionDtoConverter;
 
 
-    public AccoutDtoConverter(CustomerDtoConverter customerDtoConverter, TransactionDtoConverter transactionDtoConverter) {
+    public AccoutDtoConverter(CustomerDtoConverter customerDtoConverter,TransactionDtoConverter transactionDtoConverter) {
         this.customerDtoConverter = customerDtoConverter;
         this.transactionDtoConverter = transactionDtoConverter;
     }

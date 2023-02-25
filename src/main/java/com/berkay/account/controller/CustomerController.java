@@ -1,6 +1,7 @@
 package com.berkay.account.controller;
 
 import com.berkay.account.dto.CustomerDto;
+import com.berkay.account.dto.CustomerDtoConverter;
 import com.berkay.account.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,10 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
+
+    public CustomerController(CustomerService customerService, CustomerDtoConverter customerDtoConverter) {
         this.customerService = customerService;
+
     }
 
     @GetMapping("/{customerId}")
